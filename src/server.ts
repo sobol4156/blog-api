@@ -7,6 +7,8 @@ import helmet from 'helmet'
 import config from '@/config'
 import limiter from '@/lib/express_rate_limit'
 
+import v1Routes from '@/routes/v1'
+
 import type { CorsOptions } from 'cors'
 
 const app = express()
@@ -35,15 +37,33 @@ app.use(compression({
 
 app.use(helmet())
 
-app.use(limiter)
+app.use(limiter);
+
+(async () => {
+  try {
+    app.use('/api/v1', v1Routes)
+
+    app.listen(config.PORT, () => {
+      console.log(`service running: http://localhost:${config.PORT}`)
+    })
+  } catch (err) {
+    console.log(`Failed to start the server ${err}`);
+
+    if (config.NODE_ENV === 'production') {
+      process.exit(1)
+    }
+  }
+})()
+
+const handleServerShutdown = async () => {
+  try{
+    console.log(`Server SHUTDOWN`)
+    process.exit(0)
+  }catch(err){
+    console.log(`Error during server shutdown ${err}`)
+  }
+}
 
 
-app.get('/', (req, res) => {
-  res.json({
-    message: 'Hi'
-  })
-})
-
-app.listen(config.PORT, () => {
-  console.log(`service running: http://localhost:${config.PORT}`)
-})
+process.on('SIGTERM', handleServerShutdown)
+process.on('SIGINT', handleServerShutdown)
