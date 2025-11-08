@@ -1,13 +1,12 @@
-import { logger } from '@/lib/winston';
-import User from '@/models/user';
-import Token from '@/models/token';
+import type { Request, Response } from 'express';
 
 import config from '@/config';
-import { genUsername } from '@/utils';
 import { generateAccessToken, generateRefreshToken } from '@/lib/jwt';
-
+import { logger } from '@/lib/winston';
+import Token from '@/models/token';
+import User from '@/models/user';
 import type { IUser } from '@/models/user';
-import type { Request, Response } from 'express';
+import { genUsername } from '@/utils';
 
 type UserData = Pick<IUser, 'email' | 'password' | 'role'>;
 

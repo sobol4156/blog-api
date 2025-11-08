@@ -1,14 +1,14 @@
+import bcrypt from 'bcrypt';
 import { Router } from 'express';
 import { body, cookie } from 'express-validator';
-import bcrypt from 'bcrypt';
 
-import User from '@/models/user';
-import register from '@/controllers/v1/auth/register';
 import login from '@/controllers/v1/auth/login';
-import refreshToken from '@/controllers/v1/auth/refresh-token';
 import logout from '@/controllers/v1/auth/logout';
-import validationError from '@/middlewares/validationError';
+import refreshToken from '@/controllers/v1/auth/refresh-token';
+import register from '@/controllers/v1/auth/register';
 import authenticate from '@/middlewares/authenticate';
+import validationError from '@/middlewares/validationError';
+import User from '@/models/user';
 
 const router = Router();
 

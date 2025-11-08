@@ -1,7 +1,8 @@
-import { logger } from '@/lib/winston';
-import config from '@/config';
-import Token from '@/models/token';
 import type { Request, Response } from 'express';
+
+import config from '@/config';
+import { logger } from '@/lib/winston';
+import Token from '@/models/token';
 
 const logout = async (req: Request, res: Response): Promise<void> => {
   try {

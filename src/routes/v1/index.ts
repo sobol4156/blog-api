@@ -1,4 +1,5 @@
 import { Router } from 'express';
+
 import authRouter from '@/routes/v1/auth';
 import userRouter from '@/routes/v1/users';
 

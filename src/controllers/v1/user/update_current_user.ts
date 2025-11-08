@@ -1,4 +1,5 @@
 import type { Request, Response } from 'express';
+
 import { logger } from '@/lib/winston';
 import User from '@/models/user';
 

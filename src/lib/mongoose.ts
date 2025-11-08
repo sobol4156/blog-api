@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
-import config from '@/config';
 import type { ConnectOptions } from 'mongoose';
+
+import config from '@/config';
 import { logger } from '@/lib/winston';
 
 const clientOptions: ConnectOptions = {

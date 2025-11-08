@@ -1,4 +1,4 @@
-import { Schema, model, Types } from 'mongoose';
+import { Schema, Types, model } from 'mongoose';
 
 interface IToken {
   token: string;
