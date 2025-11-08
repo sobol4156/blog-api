@@ -1,5 +1,7 @@
 import { logger } from '@/lib/winston'
 import User from '@/models/user'
+import Token from '@/models/token'
+
 import config from '@/config'
 import { genUsername } from '@/utils'
 import { generateAccessToken, generateRefreshToken } from '@/lib/jwt'
@@ -24,6 +26,12 @@ const register = async (req: Request, res: Response): Promise<void> => {
 
     const accessToken = generateAccessToken(newUser._id)
     const refreshToken = generateRefreshToken(newUser._id)
+
+    await Token.create({ token: refreshToken, userId: newUser._id })
+    logger.info('Refresh token created for user', {
+      userId: newUser._id,
+      token: refreshToken
+    })
 
     res.cookie('refreshToken', refreshToken, {
       httpOnly: true,
