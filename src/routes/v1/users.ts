@@ -20,6 +20,51 @@ router.put(
   '/current',
   authenticate,
   authorize(['admin', 'user']),
+  body('username')
+    .optional()
+    .trim()
+    .isLength({ max: 20 })
+    .withMessage('Username must be less than 20 characters')
+    .custom(async (value) => {
+      const userExists = await User.exists({ username: value })
+
+      if (userExists) {
+        throw new Error('This username is already in use')
+      }
+    }),
+  body('email')
+    .optional()
+    .isLength({ max: 50 })
+    .withMessage('Email must be less than 50 characters')
+    .isEmail()
+    .withMessage('Invalid email address')
+    .custom(async (value) => {
+      const userExists = await User.exists({ email: value })
+
+      if (userExists) {
+        throw new Error('This email is already in use')
+      }
+    })
+  ,
+  body('password')
+    .optional()
+    .isLength({ min: 8 })
+    .withMessage('Password must be at least 8 characters long'),
+  body('first_name')
+    .optional()
+    .isLength({ max: 20 })
+    .withMessage('First name must be less than 20 characters'),
+  body('last_name')
+    .optional()
+    .isLength({ max: 20 })
+    .withMessage('Last name must be less than 20 characters'),
+  body(['website', 'facebook', 'instagram', 'x', 'youtube'])
+    .optional()
+    .isURL()
+    .withMessage('Invalid URL')
+    .isLength({ max: 100 })
+    .withMessage('Url must be less than 100 characters'),
+  validationError,
   updateCurrentUser
 )
 
