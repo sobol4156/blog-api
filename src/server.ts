@@ -51,7 +51,7 @@ app.use(limiter);
     app.use('/api/v1', v1Routes)
 
     app.listen(config.PORT, () => {
-      logger.info(`service running: http://localhost:${config.PORT}`)
+      logger.info(`Service running: http://localhost:${config.PORT}`)
     })
   } catch (err) {
     logger.error(`Failed to start the server ${err}`);
