@@ -8,16 +8,16 @@ const getCurrentUser = async (req: Request, res: Response): Promise<void> => {
 
     const user = await User.findById(userId).select('-__v').lean().exec();
 
-    res.status(200).json(user)
+    res.status(200).json({ user })
   } catch (err) {
-      res.status(500).json({
-        code: 'ServerError',
-        message: 'Internal server error',
-        error: err
-      })
+    res.status(500).json({
+      code: 'ServerError',
+      message: 'Internal server error',
+      error: err
+    })
 
-      logger.error('Error while getting current user', err)
-    }
+    logger.error('Error while getting current user', err)
+  }
 }
 
 export default getCurrentUser
