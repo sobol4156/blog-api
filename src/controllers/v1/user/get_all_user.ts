@@ -6,14 +6,14 @@ import User from '@/models/user';
 
 const getAllUser = async (req: Request, res: Response): Promise<void> => {
   try {
-    const limit = (req.query.limit as string) || config.defaultResLimit;
-    const offset = (req.query.offset as string) || config.defaultResOffset;
+    const limit = parseInt(req.query.limit as string) || config.defaultResLimit;
+    const offset = parseInt(req.query.offset as string) || config.defaultResOffset;
     const total = await User.countDocuments();
 
     const users = await User.find()
       .select('-__v')
-      .limit(Number(limit))
-      .skip(Number(offset))
+      .limit(limit)
+      .skip(offset)
       .lean()
       .exec();
 

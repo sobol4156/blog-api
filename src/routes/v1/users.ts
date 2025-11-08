@@ -12,7 +12,15 @@ import User from '@/models/user';
 
 const router = Router();
 
-router.get('', authenticate, authorize(['admin']), getAllUser);
+router.get('',
+  authenticate,
+  authorize(['admin']),
+  query('limit')
+    .optional()
+    .isInt({ min: 1, max: 50 })
+    .withMessage('Limit must be between 1 to 50'),
+  validationError,
+  getAllUser);
 
 router.get('/current', authenticate, authorize(['admin', 'user']), getCurrentUser);
 
