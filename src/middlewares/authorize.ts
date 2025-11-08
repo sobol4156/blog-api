@@ -1,12 +1,12 @@
-import { logger } from "@/lib/winston";
-import User from '@/models/user'
-import type { Request, Response, NextFunction } from "express";
+import { logger } from '@/lib/winston';
+import User from '@/models/user';
+import type { Request, Response, NextFunction } from 'express';
 
-export type AuthRole = 'admin' | 'user'
+export type AuthRole = 'admin' | 'user';
 
 const authorize = (roles: AuthRole[]) => {
   return async (req: Request, res: Response, next: NextFunction) => {
-    const userId = req.userId
+    const userId = req.userId;
 
     try {
       const user = await User.findById(userId).select('role').exec();
@@ -14,31 +14,31 @@ const authorize = (roles: AuthRole[]) => {
       if (!user) {
         res.status(404).json({
           code: 'NotFound',
-          message: 'User not found'
-        })
-        return
+          message: 'User not found',
+        });
+        return;
       }
 
       if (!roles.includes(user.role)) {
         res.status(403).json({
           code: 'AuthorizationError',
-          message: 'Access denied, insufficient permissions'
-        })
+          message: 'Access denied, insufficient permissions',
+        });
 
-        return
+        return;
       }
 
-      return next()
+      return next();
     } catch (err) {
       res.status(500).json({
         code: 'ServerError',
         message: 'Internal server error',
-        error: err
-      })
+        error: err,
+      });
 
-      logger.error('Error while authorizing user', err)
+      logger.error('Error while authorizing user', err);
     }
-  }
-}
+  };
+};
 
-export default authorize
+export default authorize;

@@ -1,9 +1,9 @@
-import { logger } from "@/lib/winston";
-import User from "@/models/user";
-import type { Request, Response } from "express";
+import type { Request, Response } from 'express';
+import { logger } from '@/lib/winston';
+import User from '@/models/user';
 
 const updateCurrentUser = async (req: Request, res: Response): Promise<void> => {
-  const userId = req.userId
+  const userId = req.userId;
   const {
     username,
     email,
@@ -14,7 +14,7 @@ const updateCurrentUser = async (req: Request, res: Response): Promise<void> => 
     facebook,
     instagram,
     x,
-    youtube
+    youtube,
   } = req.body;
 
   try {
@@ -24,10 +24,10 @@ const updateCurrentUser = async (req: Request, res: Response): Promise<void> => 
       res.status(404).json({
         code: 'NotFound',
         message: 'User was not found',
-      })
-      logger.error('User was not found')
+      });
+      logger.error('User was not found');
 
-      return
+      return;
     }
 
     if (username) user.username = username;
@@ -35,7 +35,7 @@ const updateCurrentUser = async (req: Request, res: Response): Promise<void> => 
     if (first_name) user.firstName = first_name;
     if (last_name) user.lastName = last_name;
     if (!user.socialLinks) {
-      user.socialLinks = {}
+      user.socialLinks = {};
     }
 
     if (website) user.socialLinks.website = website;
@@ -46,17 +46,17 @@ const updateCurrentUser = async (req: Request, res: Response): Promise<void> => 
 
     await user.save();
 
-    logger.info('User update successfully', user)
-    res.status(200).json({ user })
+    logger.info('User update successfully', user);
+    res.status(200).json({ user });
   } catch (err) {
     res.status(500).json({
       code: 'ServerError',
       message: 'Internal server error',
-      error: err
-    })
+      error: err,
+    });
 
-    logger.error('Error while updating current user', err)
+    logger.error('Error while updating current user', err);
   }
-}
+};
 
-export default updateCurrentUser
+export default updateCurrentUser;

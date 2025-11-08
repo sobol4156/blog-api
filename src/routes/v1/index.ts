@@ -1,6 +1,6 @@
-import { Router } from 'express'
-import authRouter from '@/routes/v1/auth'
-import userRouter from '@/routes/v1/users'
+import { Router } from 'express';
+import authRouter from '@/routes/v1/auth';
+import userRouter from '@/routes/v1/users';
 
 const router = Router();
 
@@ -9,11 +9,11 @@ router.get('/', (req, res) => {
     message: 'API IS LIVE',
     status: 'ok',
     version: '1.0.0',
-    timestamp: new Date().toISOString()
-  })
-})
+    timestamp: new Date().toISOString(),
+  });
+});
 
-router.use('/auth', authRouter)
-router.use('/users', userRouter)
+router.use('/auth', authRouter);
+router.use('/users', userRouter);
 
-export default router
+export default router;

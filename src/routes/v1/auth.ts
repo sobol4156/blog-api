@@ -1,18 +1,19 @@
-import { Router } from "express";
-import { body, cookie } from "express-validator";
-import bcrypt from 'bcrypt'
+import { Router } from 'express';
+import { body, cookie } from 'express-validator';
+import bcrypt from 'bcrypt';
 
-import User from "@/models/user";
-import register from "@/controllers/v1/auth/register";
-import login from "@/controllers/v1/auth/login";
-import refreshToken from "@/controllers/v1/auth/refresh-token";
-import logout from "@/controllers/v1/auth/logout";
-import validationError from "@/middlewares/validationError";
-import authenticate from "@/middlewares/authenticate";
+import User from '@/models/user';
+import register from '@/controllers/v1/auth/register';
+import login from '@/controllers/v1/auth/login';
+import refreshToken from '@/controllers/v1/auth/refresh-token';
+import logout from '@/controllers/v1/auth/logout';
+import validationError from '@/middlewares/validationError';
+import authenticate from '@/middlewares/authenticate';
 
-const router = Router()
+const router = Router();
 
-router.post(`/register`,
+router.post(
+  `/register`,
   body('email')
     .trim()
     .notEmpty()
@@ -22,10 +23,10 @@ router.post(`/register`,
     .isEmail()
     .withMessage('Invalid email address')
     .custom(async (value) => {
-      const userExists = await User.exists({ email: value })
+      const userExists = await User.exists({ email: value });
 
       if (userExists) {
-        throw new Error('User already exists')
+        throw new Error('User already exists');
       }
     }),
   body('password')
@@ -40,9 +41,11 @@ router.post(`/register`,
     .isIn(['admin', 'user'])
     .withMessage('Role must be either admin or user'),
   validationError,
-  register)
+  register,
+);
 
-router.post('/login',
+router.post(
+  '/login',
   body('email')
     .trim()
     .notEmpty()
@@ -52,10 +55,10 @@ router.post('/login',
     .isEmail()
     .withMessage('Invalid email address')
     .custom(async (value) => {
-      const userExists = await User.exists({ email: value })
+      const userExists = await User.exists({ email: value });
 
       if (!userExists) {
-        throw new Error('User already exists')
+        throw new Error('User already exists');
       }
     }),
   body('password')
@@ -66,34 +69,33 @@ router.post('/login',
     .custom(async (value, { req }) => {
       const { email } = req.body as { email: string };
 
-      const user = await User.findOne({ email })
-        .select('password')
-        .lean()
-        .exec()
+      const user = await User.findOne({ email }).select('password').lean().exec();
 
       if (!user) {
-        throw new Error('User email or password is invalid')
+        throw new Error('User email or password is invalid');
       }
 
-      const passwordMatch = await bcrypt.compare(value, user.password)
+      const passwordMatch = await bcrypt.compare(value, user.password);
 
       if (!passwordMatch) {
-        throw new Error('User email or password is invalid')
+        throw new Error('User email or password is invalid');
       }
     }),
   validationError,
-  login
-)
+  login,
+);
 
-router.post('/refresh-token',
+router.post(
+  '/refresh-token',
   cookie('refreshToken')
     .notEmpty()
     .withMessage('Refresh token required')
     .isJWT()
     .withMessage('Invalid refresh token'),
   validationError,
-  refreshToken)
+  refreshToken,
+);
 
-router.post('/logout', authenticate, logout)
+router.post('/logout', authenticate, logout);
 
-export default router
+export default router;

@@ -1,19 +1,19 @@
-import { Schema, model, Types } from "mongoose";
+import { Schema, model, Types } from 'mongoose';
 
 interface IToken {
   token: string;
-  userId: Types.ObjectId
+  userId: Types.ObjectId;
 }
 
 const tokenSchema = new Schema<IToken>({
   token: {
     type: String,
-    require: true
+    require: true,
   },
   userId: {
     type: Schema.Types.ObjectId,
-    require: true
-  }
-})
+    require: true,
+  },
+});
 
-export default model<IToken>('Token', tokenSchema)
+export default model<IToken>('Token', tokenSchema);

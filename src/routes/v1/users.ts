@@ -1,21 +1,16 @@
-import { Router } from "express";
-import { param, query, body } from 'express-validator'
-import authenticate from "@/middlewares/authenticate";
-import validationError from "@/middlewares/validationError";
-import User from "@/models/user";
-import authorize from "@/middlewares/authorize";
-import getCurrentUser from "@/controllers/v1/user/get_current_user";
-import updateCurrentUser from "@/controllers/v1/user/update_current_user";
-import deleteCurrentUser from "@/controllers/v1/user/delete_current_user";
+import { Router } from 'express';
+import { param, query, body } from 'express-validator';
+import authenticate from '@/middlewares/authenticate';
+import validationError from '@/middlewares/validationError';
+import User from '@/models/user';
+import authorize from '@/middlewares/authorize';
+import getCurrentUser from '@/controllers/v1/user/get_current_user';
+import updateCurrentUser from '@/controllers/v1/user/update_current_user';
+import deleteCurrentUser from '@/controllers/v1/user/delete_current_user';
 
 const router = Router();
 
-router.get(
-  '/current',
-  authenticate,
-  authorize(['admin', 'user']),
-  getCurrentUser
-)
+router.get('/current', authenticate, authorize(['admin', 'user']), getCurrentUser);
 
 router.put(
   '/current',
@@ -27,10 +22,10 @@ router.put(
     .isLength({ max: 20 })
     .withMessage('Username must be less than 20 characters')
     .custom(async (value) => {
-      const userExists = await User.exists({ username: value })
+      const userExists = await User.exists({ username: value });
 
       if (userExists) {
-        throw new Error('This username is already in use')
+        throw new Error('This username is already in use');
       }
     }),
   body('email')
@@ -40,13 +35,12 @@ router.put(
     .isEmail()
     .withMessage('Invalid email address')
     .custom(async (value) => {
-      const userExists = await User.exists({ email: value })
+      const userExists = await User.exists({ email: value });
 
       if (userExists) {
-        throw new Error('This email is already in use')
+        throw new Error('This email is already in use');
       }
-    })
-  ,
+    }),
   body('password')
     .optional()
     .isLength({ min: 8 })
@@ -66,14 +60,9 @@ router.put(
     .isLength({ max: 100 })
     .withMessage('Url must be less than 100 characters'),
   validationError,
-  updateCurrentUser
-)
+  updateCurrentUser,
+);
 
-router.delete(
-  '/current',
-  authenticate,
-  authorize(['admin', 'user']),
-  deleteCurrentUser
-)
+router.delete('/current', authenticate, authorize(['admin', 'user']), deleteCurrentUser);
 
-export default router
+export default router;

@@ -1,4 +1,4 @@
-import { rateLimit } from 'express-rate-limit'
+import { rateLimit } from 'express-rate-limit';
 
 const limiter = rateLimit({
   windowMs: 60000,
@@ -6,8 +6,8 @@ const limiter = rateLimit({
   standardHeaders: 'draft-8',
   legacyHeaders: false,
   message: {
-    error: "U have sent to many requests in a given amount of time. Please try again later"
-  }
-})
+    error: 'U have sent to many requests in a given amount of time. Please try again later',
+  },
+});
 
-export default limiter
+export default limiter;

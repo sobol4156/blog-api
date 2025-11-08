@@ -1,27 +1,27 @@
-import { logger } from "@/lib/winston";
-import User from "@/models/user";
-import type { Request, Response } from "express";
+import { logger } from '@/lib/winston';
+import User from '@/models/user';
+import type { Request, Response } from 'express';
 
 const deleteCurrentUser = async (req: Request, res: Response): Promise<void> => {
   try {
-    const userId = req.userId
+    const userId = req.userId;
 
-    await User.deleteOne({ _id: userId })
+    await User.deleteOne({ _id: userId });
 
     logger.info('A user accoun has been deleted', {
-      userId
-    })
+      userId,
+    });
 
-    res.sendStatus(204)
+    res.sendStatus(204);
   } catch (err) {
     res.status(500).json({
       code: 'ServerError',
       message: 'Internal server error',
-      error: err
-    })
+      error: err,
+    });
 
-    logger.error('Error while deleting current user account', err)
+    logger.error('Error while deleting current user account', err);
   }
-}
+};
 
-export default deleteCurrentUser
+export default deleteCurrentUser;
