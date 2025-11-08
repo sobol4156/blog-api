@@ -4,7 +4,8 @@
   "description": "",
   "main": "dist/index.js",
   "scripts": {
-    "dev": "nodemon"
+    "dev": "nodemon",
+    "format": "npx prettier --write src/**/*.ts"
   },
   "keywords": [],
   "author": "",

@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { body, param, query } from 'express-validator';
 
 import deleteCurrentUser from '@/controllers/v1/user/delete_current_user';
+import getAllUser from '@/controllers/v1/user/get_all_user';
 import getCurrentUser from '@/controllers/v1/user/get_current_user';
 import updateCurrentUser from '@/controllers/v1/user/update_current_user';
 import authenticate from '@/middlewares/authenticate';
@@ -10,6 +11,8 @@ import validationError from '@/middlewares/validationError';
 import User from '@/models/user';
 
 const router = Router();
+
+router.get('', authenticate, authorize(['admin']), getAllUser);
 
 router.get('/current', authenticate, authorize(['admin', 'user']), getCurrentUser);
 

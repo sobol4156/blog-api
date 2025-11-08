@@ -1,0 +1,37 @@
+import type { Request, Response } from 'express';
+
+import config from '@/config';
+import { logger } from '@/lib/winston';
+import User from '@/models/user';
+
+const getAllUser = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const limit = (req.query.limit as string) || config.defaultResLimit;
+    const offset = (req.query.offset as string) || config.defaultResOffset;
+    const total = await User.countDocuments();
+
+    const users = await User.find()
+      .select('-__v')
+      .limit(Number(limit))
+      .skip(Number(offset))
+      .lean()
+      .exec();
+
+    res.status(200).json({
+      limit,
+      offset,
+      total,
+      users,
+    });
+  } catch (err) {
+    res.status(500).json({
+      code: 'ServerError',
+      message: 'Internal server error',
+      error: err,
+    });
+
+    logger.error('Error while getting current user', err);
+  }
+};
+
+export default getAllUser;
