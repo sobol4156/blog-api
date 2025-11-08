@@ -9,6 +9,7 @@ import authenticate from '@/middlewares/authenticate';
 import authorize from '@/middlewares/authorize';
 import validationError from '@/middlewares/validationError';
 import User from '@/models/user';
+import getUserById from '@/controllers/v1/user/get_user_by_id';
 
 const router = Router();
 
@@ -21,10 +22,23 @@ router.get('',
     .withMessage('Limit must be between 1 to 50'),
   query('offset')
     .optional()
-    .isInt({ min: 0})
+    .isInt({ min: 0 })
     .withMessage('Offset must be a positive integer'),
   validationError,
-  getAllUser);
+  getAllUser
+);
+
+router.get(
+  '/:userId',
+  authenticate,
+  authorize(['admin']),
+  param('userId')
+  .notEmpty()
+  .isMongoId()
+  .withMessage('Invalid user ID'),
+  validationError,
+  getUserById
+)
 
 router.get('/current', authenticate, authorize(['admin', 'user']), getCurrentUser);
 
