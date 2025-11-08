@@ -1,10 +1,11 @@
 import { Router } from "express";
-import { body } from "express-validator";
+import { body, cookie } from "express-validator";
 import bcrypt from 'bcrypt'
 
 import User from "@/models/user";
 import register from "@/controllers/v1/auth/register";
 import login from "@/controllers/v1/auth/login";
+import refreshToken from "@/controllers/v1/auth/refresh-token";
 import validationError from "@/middlewares/validationError";
 
 const router = Router()
@@ -81,5 +82,14 @@ router.post('/login',
   validationError,
   login
 )
+
+router.post('/refresh-token',
+  cookie('refreshToken')
+    .notEmpty()
+    .withMessage('Refresh token required')
+    .isJWT()
+    .withMessage('Invalid refresh token'),
+    validationError,
+  refreshToken)
 
 export default router
