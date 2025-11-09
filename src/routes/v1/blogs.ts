@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { body } from 'express-validator';
+import { body, query } from 'express-validator';
 import multer from 'multer';
 
 import createBlog from '@/controllers/v1/blog/create_blog';
@@ -7,6 +7,7 @@ import authenticate from '@/middlewares/authenticate';
 import authorize from '@/middlewares/authorize';
 import uploadBlogBanner from '@/middlewares/uploadBlogBanner';
 import validationError from '@/middlewares/validationError';
+import getAllBlogs from '@/controllers/v1/blog/get_all_blogs';
 
 const upload = multer();
 
@@ -18,7 +19,6 @@ router.post(
   authorize(['admin']),
   upload.single('banner_image'),
   uploadBlogBanner('post'),
-  body('banner_image').notEmpty().withMessage('Banner image is required'),
   body('title')
     .trim()
     .notEmpty()
@@ -32,6 +32,16 @@ router.post(
     .withMessage('Status must be one of the value, draft or published'),
   validationError,
   createBlog,
+);
+
+router.get(
+  '',
+  authenticate,
+  authorize(['admin', 'user']),
+  query('limit').optional().isInt({ min: 1, max: 50 }).withMessage('Limit must be between 1 to 50'),
+  query('offset').optional().isInt({ min: 0 }).withMessage('Offset must be a positive integer'),
+  validationError,
+  getAllBlogs,
 );
 
 export default router;
