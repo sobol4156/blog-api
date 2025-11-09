@@ -18,6 +18,9 @@ router.post(
   authorize(['admin']),
   upload.single('banner_image'),
   uploadBlogBanner('post'),
+  body('banner_image')
+    .notEmpty()
+    .withMessage('Banner image is required'),
   body('title')
     .trim()
     .notEmpty()
