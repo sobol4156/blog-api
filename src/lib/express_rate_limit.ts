@@ -6,7 +6,7 @@ const limiter = rateLimit({
   standardHeaders: 'draft-8',
   legacyHeaders: false,
   message: {
-    error: 'U have sent to many requests in a given amount of time. Please try again later',
+    error: 'You have sent to many requests in a given amount of time. Please try again later',
   },
 });
 
