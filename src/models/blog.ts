@@ -1,5 +1,6 @@
-import { genSlug } from '@/utils';
 import { Schema, Types, model } from 'mongoose';
+
+import { genSlug } from '@/utils';
 
 export interface IBlog {
   title: string;
@@ -24,7 +25,7 @@ const blogSchema = new Schema<IBlog>(
       type: String,
       required: [true, 'Title is required'],
       maxLength: [180, 'Title must be less than 180 characters'],
-      trim: true
+      trim: true,
     },
     slug: {
       type: String,
@@ -64,24 +65,24 @@ const blogSchema = new Schema<IBlog>(
       type: String,
       enum: {
         values: ['draft', 'published'],
-        message: '{VALUE} is not supported'
+        message: '{VALUE} is not supported',
       },
       default: 'draft',
     },
   },
   {
     timestamps: {
-      createdAt: 'publishedAt'
+      createdAt: 'publishedAt',
     },
-  }
+  },
 );
 
 blogSchema.pre('validate', function (next) {
   if (this.title && !this.slug) {
-    this.slug = genSlug(this.title)
+    this.slug = genSlug(this.title);
   }
 
   next();
-})
+});
 
 export default model<IBlog>('Blog', blogSchema);

@@ -1,36 +1,35 @@
-import type { Request, Response } from 'express';
 import DOMPurify from 'dompurify';
-import { JSDOM } from 'jsdom'
+import type { Request, Response } from 'express';
+import { JSDOM } from 'jsdom';
 
 import { logger } from '@/lib/winston';
 import Blog, { IBlog } from '@/models/blog';
 
-type BlogData = Pick<IBlog, 'title' | 'content' | 'banner' | 'status'>
+type BlogData = Pick<IBlog, 'title' | 'content' | 'banner' | 'status'>;
 
 const window = new JSDOM('').window;
 const purify = DOMPurify(window);
 
 const createBlog = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { title, content, banner, status } = req.body as BlogData
+    const { title, content, banner, status } = req.body as BlogData;
     const userId = req.userId;
 
-    const cleanContent = purify.sanitize(content)
+    const cleanContent = purify.sanitize(content);
 
     const newBlog = await Blog.create({
       title,
       content: cleanContent,
       banner,
       status,
-      author: userId
-    })
+      author: userId,
+    });
 
-    logger.info('New blog created', newBlog)
+    logger.info('New blog created', newBlog);
 
     res.status(201).json({
-      blog: newBlog
-    })
-
+      blog: newBlog,
+    });
   } catch (err) {
     res.status(500).json({
       code: 'ServerError',
@@ -40,6 +39,6 @@ const createBlog = async (req: Request, res: Response): Promise<void> => {
 
     logger.error('Error during blog creation', err);
   }
-}
+};
 
-export default createBlog
+export default createBlog;
