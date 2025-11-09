@@ -10,12 +10,7 @@ const getAllUser = async (req: Request, res: Response): Promise<void> => {
     const offset = parseInt(req.query.offset as string) || config.defaultResOffset;
     const total = await User.countDocuments();
 
-    const users = await User.find()
-      .select('-__v')
-      .limit(limit)
-      .skip(offset)
-      .lean()
-      .exec();
+    const users = await User.find().select('-__v').limit(limit).skip(offset).lean().exec();
 
     res.status(200).json({
       limit,

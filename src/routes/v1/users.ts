@@ -2,56 +2,45 @@ import { Router } from 'express';
 import { body, param, query } from 'express-validator';
 
 import deleteCurrentUser from '@/controllers/v1/user/delete_current_user';
+import deleteUserById from '@/controllers/v1/user/delete_user_by_id';
 import getAllUser from '@/controllers/v1/user/get_all_user';
 import getCurrentUser from '@/controllers/v1/user/get_current_user';
+import getUserById from '@/controllers/v1/user/get_user_by_id';
 import updateCurrentUser from '@/controllers/v1/user/update_current_user';
 import authenticate from '@/middlewares/authenticate';
 import authorize from '@/middlewares/authorize';
 import validationError from '@/middlewares/validationError';
 import User from '@/models/user';
-import getUserById from '@/controllers/v1/user/get_user_by_id';
-import deleteUserById from '@/controllers/v1/user/delete_user_by_id';
 
 const router = Router();
 
-router.get('',
+router.get(
+  '',
   authenticate,
   authorize(['admin']),
-  query('limit')
-    .optional()
-    .isInt({ min: 1, max: 50 })
-    .withMessage('Limit must be between 1 to 50'),
-  query('offset')
-    .optional()
-    .isInt({ min: 0 })
-    .withMessage('Offset must be a positive integer'),
+  query('limit').optional().isInt({ min: 1, max: 50 }).withMessage('Limit must be between 1 to 50'),
+  query('offset').optional().isInt({ min: 0 }).withMessage('Offset must be a positive integer'),
   validationError,
-  getAllUser
+  getAllUser,
 );
 
 router.get(
   '/:userId',
   authenticate,
   authorize(['admin']),
-  param('userId')
-  .notEmpty()
-  .isMongoId()
-  .withMessage('Invalid user ID'),
+  param('userId').notEmpty().isMongoId().withMessage('Invalid user ID'),
   validationError,
-  getUserById
-)
+  getUserById,
+);
 
 router.delete(
   '/:userId',
   authenticate,
   authorize(['admin']),
-  param('userId')
-  .notEmpty()
-  .isMongoId()
-  .withMessage('Invalid user ID'),
+  param('userId').notEmpty().isMongoId().withMessage('Invalid user ID'),
   validationError,
-  deleteUserById
-)
+  deleteUserById,
+);
 
 router.get('/current', authenticate, authorize(['admin', 'user']), getCurrentUser);
 
