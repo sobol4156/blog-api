@@ -11,6 +11,7 @@ import authorize from '@/middlewares/authorize';
 import uploadBlogBanner from '@/middlewares/uploadBlogBanner';
 import validationError from '@/middlewares/validationError';
 import updateBlog from '@/controllers/v1/blog/update_blog';
+import deleteBlogById from '@/controllers/v1/blog/delete_blog_by_id';
 
 const upload = multer();
 
@@ -81,6 +82,15 @@ router.put(
   validationError,
   uploadBlogBanner('put'),
   updateBlog
+)
+
+router.delete(
+  '/:blogId',
+  authenticate,
+  authorize(['admin', 'user']),
+  param('blogId').notEmpty().isMongoId().withMessage('Invalid Blog ID'),
+  validationError,
+  deleteBlogById
 )
 
 export default router;

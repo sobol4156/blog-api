@@ -28,7 +28,6 @@ const getBlogsByUser = async (req: Request, res: Response): Promise<void> => {
 
     const query: QueryType = {};
 
-
     const objectIdUser = new Types.ObjectId(userId);
 
     if (currentUser?.role === 'user' && currentUserId?.toString() !== objectIdUser.toString()) {
