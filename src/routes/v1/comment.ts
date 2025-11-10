@@ -6,8 +6,18 @@ import authenticate from '@/middlewares/authenticate';
 import authorize from '@/middlewares/authorize';
 import validationError from '@/middlewares/validationError';
 import deleteCommentBlog from '@/controllers/v1/comment/delete_comment_blog';
+import getCommentBlog from '@/controllers/v1/comment/get_comment_blog';
 
 const router = Router();
+
+router.get(
+  '/blog/:commentId',
+  authenticate,
+  authorize(['user', 'admin']),
+  param('commentId').isMongoId().withMessage('commentId is required'),
+  validationError,
+  getCommentBlog,
+);
 
 router.post(
   '/blog/:blogId',
