@@ -2,10 +2,10 @@ import { Router } from 'express';
 import { param } from 'express-validator';
 
 import likeBlog from '@/controllers/v1/like/like_blog';
+import unLikeBlog from '@/controllers/v1/like/unlike_blog';
 import authenticate from '@/middlewares/authenticate';
 import authorize from '@/middlewares/authorize';
 import validationError from '@/middlewares/validationError';
-import unLikeBlog from '@/controllers/v1/like/unlike_blog';
 
 const router = Router();
 

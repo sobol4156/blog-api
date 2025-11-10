@@ -2,6 +2,7 @@ import { Router } from 'express';
 
 import authRouter from '@/routes/v1/auth';
 import blogRouter from '@/routes/v1/blog';
+import commentRouter from '@/routes/v1/comment';
 import likesRouter from '@/routes/v1/like';
 import userRouter from '@/routes/v1/user';
 
@@ -20,5 +21,6 @@ router.use('/auth', authRouter);
 router.use('/users', userRouter);
 router.use('/blogs', blogRouter);
 router.use('/likes', likesRouter);
+router.use('/comments', commentRouter);
 
 export default router;
