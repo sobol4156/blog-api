@@ -4,6 +4,7 @@ import config from '@/config';
 import { logger } from '@/lib/winston';
 import Blog from '@/models/blog';
 import User from '@/models/user';
+import { Types } from 'mongoose';
 
 interface QueryType {
   status?: 'draft' | 'published';
@@ -27,7 +28,10 @@ const getBlogsByUser = async (req: Request, res: Response): Promise<void> => {
 
     const query: QueryType = {};
 
-    if (currentUser?.role === 'user') {
+
+    const objectIdUser = new Types.ObjectId(userId);
+
+    if (currentUser?.role === 'user' && currentUserId?.toString() !== objectIdUser.toString()) {
       query.status = 'published';
     }
 

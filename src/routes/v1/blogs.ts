@@ -10,6 +10,7 @@ import authenticate from '@/middlewares/authenticate';
 import authorize from '@/middlewares/authorize';
 import uploadBlogBanner from '@/middlewares/uploadBlogBanner';
 import validationError from '@/middlewares/validationError';
+import updateBlog from '@/controllers/v1/blog/update_blog';
 
 const upload = multer();
 
@@ -18,7 +19,7 @@ const router = Router();
 router.post(
   '/',
   authenticate,
-  authorize(['admin']),
+  authorize(['admin', 'user']),
   upload.single('banner_image'),
   uploadBlogBanner('post'),
   body('title')
@@ -58,5 +59,28 @@ router.get(
 );
 
 router.get('/:slug', authenticate, authorize(['admin', 'user']), validationError, getBlogBySlug);
+
+router.put(
+  '/:blogId',
+  authenticate,
+  authorize(['admin', 'user']),
+  param('blogId').notEmpty().isMongoId().withMessage('Invalid Blog ID'),
+  upload.single('banner_image'),
+  body('title')
+    .optional()
+    .trim()
+    .notEmpty()
+    .withMessage('Title is required')
+    .isLength({ max: 180 })
+    .withMessage('Title must be less than 180 characters'),
+  body('content').optional(),
+  body('status')
+    .optional()
+    .isIn(['draft', 'published'])
+    .withMessage('Status must be one of the value, draft or published'),
+  validationError,
+  uploadBlogBanner('put'),
+  updateBlog
+)
 
 export default router;
