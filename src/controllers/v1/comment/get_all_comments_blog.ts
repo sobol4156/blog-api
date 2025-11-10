@@ -10,7 +10,7 @@ const getAllCommentsBlog = async (req: Request, res: Response): Promise<void> =>
     const comments = await Comment.find({ blogId }).lean().exec();
 
     res.status(200).json({
-      data: comments ?? []
+      data: comments ?? [],
     });
   } catch (err) {
     res.status(500).json({

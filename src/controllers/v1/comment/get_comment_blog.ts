@@ -18,7 +18,7 @@ const getCommentBlog = async (req: Request, res: Response): Promise<void> => {
     }
 
     res.status(200).json({
-      comment
+      comment,
     });
   } catch (err) {
     res.status(500).json({

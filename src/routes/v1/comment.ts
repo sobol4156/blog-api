@@ -2,12 +2,12 @@ import { Router } from 'express';
 import { body, param } from 'express-validator';
 
 import commentBlog from '@/controllers/v1/comment/comment_blog';
+import deleteCommentBlog from '@/controllers/v1/comment/delete_comment_blog';
+import getAllCommentsBlog from '@/controllers/v1/comment/get_all_comments_blog';
+import getCommentBlog from '@/controllers/v1/comment/get_comment_blog';
 import authenticate from '@/middlewares/authenticate';
 import authorize from '@/middlewares/authorize';
 import validationError from '@/middlewares/validationError';
-import deleteCommentBlog from '@/controllers/v1/comment/delete_comment_blog';
-import getCommentBlog from '@/controllers/v1/comment/get_comment_blog';
-import getAllCommentsBlog from '@/controllers/v1/comment/get_all_comments_blog';
 
 const router = Router();
 

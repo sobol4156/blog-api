@@ -2,8 +2,8 @@ import type { Request, Response } from 'express';
 
 import { logger } from '@/lib/winston';
 import Blog from '@/models/blog';
-import User from '@/models/user';
 import Comment from '@/models/comment';
+import User from '@/models/user';
 
 const deleteCommentBlog = async (req: Request, res: Response): Promise<void> => {
   const { commentId } = req.params;
@@ -19,7 +19,7 @@ const deleteCommentBlog = async (req: Request, res: Response): Promise<void> => 
       return;
     }
 
-    const user = await User.findById(userId).lean().select('role').exec()
+    const user = await User.findById(userId).lean().select('role').exec();
     if (!user) {
       res.status(404).json({
         code: 'NotFound',
@@ -55,7 +55,7 @@ const deleteCommentBlog = async (req: Request, res: Response): Promise<void> => 
     await Comment.deleteOne({ _id: commentId });
 
     logger.info('Comment deleted successfully', {
-      commentId
+      commentId,
     });
 
     blog.commentsCount--;
@@ -63,7 +63,7 @@ const deleteCommentBlog = async (req: Request, res: Response): Promise<void> => 
 
     logger.info('Blog comment count updated', {
       blogId: blog._id,
-      commentsCount: blog.commentsCount
+      commentsCount: blog.commentsCount,
     });
 
     res.sendStatus(204);
