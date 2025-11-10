@@ -6,13 +6,13 @@ import Blog from '@/models/blog';
 import User from '@/models/user';
 
 interface QueryType {
-  status?: 'draft' | 'published'
+  status?: 'draft' | 'published';
 }
 
 const getBlogsByUser = async (req: Request, res: Response): Promise<void> => {
   try {
-    const userId = req.params.userId
-    const currentUserId = req.userId
+    const userId = req.params.userId;
+    const currentUserId = req.userId;
     const limit = parseInt(req.query.limit as string) || config.defaultResLimit;
     const offset = parseInt(req.query.offset as string) || config.defaultResOffset;
 
@@ -25,10 +25,10 @@ const getBlogsByUser = async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
-    const query: QueryType = {}
+    const query: QueryType = {};
 
     if (currentUser?.role === 'user') {
-      query.status = 'published'
+      query.status = 'published';
     }
 
     const total = await Blog.countDocuments({ author: userId, ...query });

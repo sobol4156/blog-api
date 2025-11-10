@@ -3,13 +3,13 @@ import { body, param, query } from 'express-validator';
 import multer from 'multer';
 
 import createBlog from '@/controllers/v1/blog/create_blog';
+import getAllBlogs from '@/controllers/v1/blog/get_all_blogs';
+import getBlogBySlug from '@/controllers/v1/blog/get_blog_by_slug';
+import getBlogsByUser from '@/controllers/v1/blog/get_blogs_by_user';
 import authenticate from '@/middlewares/authenticate';
 import authorize from '@/middlewares/authorize';
 import uploadBlogBanner from '@/middlewares/uploadBlogBanner';
 import validationError from '@/middlewares/validationError';
-import getAllBlogs from '@/controllers/v1/blog/get_all_blogs';
-import getBlogsByUser from '@/controllers/v1/blog/get_blogs_by_user';
-import getBlogBySlug from '@/controllers/v1/blog/get_blog_by_slug';
 
 const upload = multer();
 
@@ -54,15 +54,9 @@ router.get(
   query('limit').optional().isInt({ min: 1, max: 50 }).withMessage('Limit must be between 1 to 50'),
   query('offset').optional().isInt({ min: 0 }).withMessage('Offset must be a positive integer'),
   validationError,
-  getBlogsByUser
-)
+  getBlogsByUser,
+);
 
-router.get(
-  '/:slug',
-  authenticate,
-  authorize(['admin', 'user']),
-  validationError,
-  getBlogBySlug
-)
+router.get('/:slug', authenticate, authorize(['admin', 'user']), validationError, getBlogBySlug);
 
 export default router;

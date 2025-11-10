@@ -7,8 +7,8 @@ import User from '@/models/user';
 
 const getBlogBySlug = async (req: Request, res: Response): Promise<void> => {
   try {
-    const blogSlug = req.params.slug
-    const userId = req.userId
+    const blogSlug = req.params.slug;
+    const userId = req.userId;
 
     const user = await User.findById(userId).select('role').lean().exec();
     if (!user) {
@@ -30,21 +30,21 @@ const getBlogBySlug = async (req: Request, res: Response): Promise<void> => {
         code: 'NotFound',
         message: 'Blog not found',
       });
-      return
+      return;
     }
 
     if (user?.role === 'user' && blog.status === 'draft') {
       res.status(403).json({
         code: 'AuthorizationError',
-        message: 'Access denied, insufficient permissions'
-      })
+        message: 'Access denied, insufficient permissions',
+      });
 
       logger.warn('A user trie to access a draft blog', {
         userId,
-        blog
-      })
+        blog,
+      });
 
-      return
+      return;
     }
 
     res.status(200).json({
