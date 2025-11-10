@@ -4,11 +4,24 @@ import { logger } from '@/lib/winston';
 import Blog from '@/models/blog';
 import Like from '@/models/like';
 
-const likeBlog = async (req: Request, res: Response): Promise<void> => {
+const unLikeBlog = async (req: Request, res: Response): Promise<void> => {
   const { blogId } = req.params;
   const userId = req.params.userId;
 
   try {
+    const existingLike = await Like.findOne({ blogId, userId }).lean().exec();
+
+    if (!existingLike) {
+      res.status(404).json({
+        code: 'NotFound',
+        message: 'Like not found',
+      });
+
+      return;
+    }
+
+    await Like.deleteOne({ _id: existingLike._id });
+
     const blog = await Blog.findById(blogId).select('likesCount').exec();
 
     if (!blog) {
@@ -19,23 +32,10 @@ const likeBlog = async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
-    const existingLike = await Like.findOne({ blogId, userId }).lean().exec();
-
-    if (existingLike) {
-      res.status(400).json({
-        code: 'BadRequest',
-        message: 'You already liked this blog',
-      });
-
-      return;
-    }
-
-    await Like.create({ blogId, userId });
-
-    blog.likesCount++;
+    blog.likesCount--;
     await blog.save();
 
-    logger.info('Blog liked successfully', {
+    logger.info('Blog unliked successfully', {
       userId,
       blogId: blog._id,
       likesCount: blog.likesCount,
@@ -51,8 +51,8 @@ const likeBlog = async (req: Request, res: Response): Promise<void> => {
       error: err,
     });
 
-    logger.error('Error while liking blog', err);
+    logger.error('Error while unliking blog', err);
   }
 };
 
-export default likeBlog;
+export default unLikeBlog;
