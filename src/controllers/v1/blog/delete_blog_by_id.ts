@@ -3,7 +3,7 @@ import type { Request, Response } from 'express';
 import { logger } from '@/lib/winston';
 import User from '@/models/user';
 import Blog from '@/models/blog';
-import { Types } from 'mongoose';
+import { v2 as cloudinary } from 'cloudinary';
 
 const deleteBlogById = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -11,7 +11,7 @@ const deleteBlogById = async (req: Request, res: Response): Promise<void> => {
     const blogId = req.params.blogId;
 
     const user = await User.findById(userId).select('role').lean().exec();
-    const blog = await Blog.findById(blogId).select('author').lean().exec();
+    const blog = await Blog.findById(blogId).select('author banner.publicId').lean().exec();
 
     if (!blog) {
       res.status(404).json({
@@ -36,6 +36,13 @@ const deleteBlogById = async (req: Request, res: Response): Promise<void> => {
       });
       return;
     }
+
+    await cloudinary.uploader.destroy(blog.banner.publicId)
+
+
+    logger.info('Blog banner deleted from Cloudinary', {
+      publicId: blog.banner.publicId
+    });
 
     await Blog.deleteOne({ _id: blogId });
 
