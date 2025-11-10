@@ -4,7 +4,6 @@ import config from '@/config';
 import { logger } from '@/lib/winston';
 import Blog from '@/models/blog';
 import User from '@/models/user';
-import { Types } from 'mongoose';
 
 interface QueryType {
   status?: 'draft' | 'published'
