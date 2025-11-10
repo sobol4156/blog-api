@@ -15,7 +15,7 @@ const purify = DOMPurify(window);
 const commentBlog = async (req: Request, res: Response): Promise<void> => {
   const { blogId } = req.params;
   const { content } = req.body as Comment;
-  const userId = req.params.userId;
+  const userId = req.userId;
 
   try {
     const blog = await Blog.findById(blogId).select('_id commentsCount').exec();
@@ -28,7 +28,7 @@ const commentBlog = async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
-    const cleanContent = purify.sanitize(content);
+    const cleanContent = purify.sanitize(content!);
 
     const newComment = await Comment.create({
       blogId,

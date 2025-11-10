@@ -5,6 +5,7 @@ import commentBlog from '@/controllers/v1/comment/comment_blog';
 import authenticate from '@/middlewares/authenticate';
 import authorize from '@/middlewares/authorize';
 import validationError from '@/middlewares/validationError';
+import deleteCommentBlog from '@/controllers/v1/comment/delete_comment_blog';
 
 const router = Router();
 
@@ -16,6 +17,15 @@ router.post(
   body('content').trim().notEmpty().withMessage('Content is required'),
   validationError,
   commentBlog,
+);
+
+router.delete(
+  '/blog/:commentId',
+  authenticate,
+  authorize(['user', 'admin']),
+  param('commentId').isMongoId().withMessage('commentId is required'),
+  validationError,
+  deleteCommentBlog,
 );
 
 export default router;

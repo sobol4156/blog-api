@@ -3,7 +3,7 @@ import { Schema, Types, model } from 'mongoose';
 export interface IComment {
   blogId?: Types.ObjectId;
   userId: Types.ObjectId;
-  content: string;
+  content?: string;
 }
 
 const commentSchema = new Schema<IComment>({
@@ -17,7 +17,7 @@ const commentSchema = new Schema<IComment>({
   },
   content: {
     type: String,
-    require: [true, 'Content is required'],
+    required: [true, 'Content is required'],
     maxLength: [1000, 'Content must be less than 1000 characters'],
   },
 });
