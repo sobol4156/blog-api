@@ -1,9 +1,9 @@
+import { v2 as cloudinary } from 'cloudinary';
 import type { Request, Response } from 'express';
 
 import { logger } from '@/lib/winston';
-import User from '@/models/user';
 import Blog from '@/models/blog';
-import { v2 as cloudinary } from 'cloudinary';
+import User from '@/models/user';
 
 const deleteBlogById = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -37,11 +37,10 @@ const deleteBlogById = async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
-    await cloudinary.uploader.destroy(blog.banner.publicId)
-
+    await cloudinary.uploader.destroy(blog.banner.publicId);
 
     logger.info('Blog banner deleted from Cloudinary', {
-      publicId: blog.banner.publicId
+      publicId: blog.banner.publicId,
     });
 
     await Blog.deleteOne({ _id: blogId });

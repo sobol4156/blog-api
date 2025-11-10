@@ -1,20 +1,18 @@
 import type { NextFunction, Request, Response } from 'express';
 
 import { logger } from '@/lib/winston';
-import User from '@/models/user';
 import Blog from '@/models/blog';
-
+import User from '@/models/user';
 
 const checkBlogAccess = async (req: Request, res: Response, next: NextFunction) => {
   const userId = req.userId;
   const blogId = req.params.blogId;
 
-  const user = await User.findById(userId).select('role').lean().exec()
-  const blog = await Blog
-    .findById(blogId)
+  const user = await User.findById(userId).select('role').lean().exec();
+  const blog = await Blog.findById(blogId)
     .select('-banner.publicId -__v')
     .populate('author', '-createdAt -updateAt -__v')
-    .exec()
+    .exec();
 
   if (!blog) {
     res.status(404).json({
@@ -23,7 +21,7 @@ const checkBlogAccess = async (req: Request, res: Response, next: NextFunction) 
     });
     logger.error('Blog was not found');
 
-    return
+    return;
   }
 
   if (blog.author !== userId && user?.role !== 'admin') {
@@ -33,10 +31,10 @@ const checkBlogAccess = async (req: Request, res: Response, next: NextFunction) 
     });
     logger.warn('A user tried to update a blog without permissions');
 
-    return
+    return;
   }
 
-  return next()
-}
+  return next();
+};
 
-export default checkBlogAccess
+export default checkBlogAccess;

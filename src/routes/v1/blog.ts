@@ -3,15 +3,15 @@ import { body, param, query } from 'express-validator';
 import multer from 'multer';
 
 import createBlog from '@/controllers/v1/blog/create_blog';
+import deleteBlogById from '@/controllers/v1/blog/delete_blog_by_id';
 import getAllBlogs from '@/controllers/v1/blog/get_all_blogs';
 import getBlogBySlug from '@/controllers/v1/blog/get_blog_by_slug';
 import getBlogsByUser from '@/controllers/v1/blog/get_blogs_by_user';
+import updateBlog from '@/controllers/v1/blog/update_blog';
 import authenticate from '@/middlewares/authenticate';
 import authorize from '@/middlewares/authorize';
 import uploadBlogBanner from '@/middlewares/uploadBlogBanner';
 import validationError from '@/middlewares/validationError';
-import updateBlog from '@/controllers/v1/blog/update_blog';
-import deleteBlogById from '@/controllers/v1/blog/delete_blog_by_id';
 
 const upload = multer();
 
@@ -81,8 +81,8 @@ router.put(
     .withMessage('Status must be one of the value, draft or published'),
   validationError,
   uploadBlogBanner('put'),
-  updateBlog
-)
+  updateBlog,
+);
 
 router.delete(
   '/:blogId',
@@ -90,7 +90,7 @@ router.delete(
   authorize(['admin', 'user']),
   param('blogId').notEmpty().isMongoId().withMessage('Invalid Blog ID'),
   validationError,
-  deleteBlogById
-)
+  deleteBlogById,
+);
 
 export default router;

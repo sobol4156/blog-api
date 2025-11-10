@@ -1,4 +1,4 @@
-import { model, Schema, Types } from "mongoose";
+import { Schema, Types, model } from 'mongoose';
 
 interface ILike {
   blogId?: Types.ObjectId;

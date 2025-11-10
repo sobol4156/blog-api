@@ -13,20 +13,13 @@ const purify = DOMPurify(window);
 
 const updateBlog = async (req: Request, res: Response): Promise<void> => {
   try {
-    const blogId = req.params.blogId
-    const {
-      title,
-      content,
-      banner,
-      status,
-    } = req.body as BlogData;
+    const blogId = req.params.blogId;
+    const { title, content, banner, status } = req.body as BlogData;
 
-    const blog = await Blog
-      .findById(blogId)
+    const blog = await Blog.findById(blogId)
       .select('-banner.publicId -__v')
       .populate('author', '-createdAt -updateAt -__v')
-      .exec()
-
+      .exec();
 
     if (!blog) {
       res.status(404).json({
@@ -35,17 +28,16 @@ const updateBlog = async (req: Request, res: Response): Promise<void> => {
       });
       logger.error('Blog was not found');
 
-      return
+      return;
     }
 
-    if (title) blog.title = title
+    if (title) blog.title = title;
     if (content) {
       const cleanContent = purify.sanitize(content);
-      blog.content = cleanContent
+      blog.content = cleanContent;
     }
-    if (banner) blog.banner = banner
-    if (status) blog.status = status
-
+    if (banner) blog.banner = banner;
+    if (status) blog.status = status;
 
     await blog.save();
 
