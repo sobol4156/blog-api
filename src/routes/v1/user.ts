@@ -14,6 +14,12 @@ import User from '@/models/user';
 
 const router = Router();
 
+/**
+ * GET /v1/users
+ * Returns a paginated list of users.
+ * Query: limit (1..50), offset (>=0)
+ * Requires admin role.
+ */
 router.get(
   '',
   authenticate,
@@ -24,6 +30,11 @@ router.get(
   getAllUser,
 );
 
+/**
+ * GET /v1/users/:userId
+ * Returns details of a user by ID.
+ * Requires admin role.
+ */
 router.get(
   '/:userId',
   authenticate,
@@ -33,6 +44,11 @@ router.get(
   getUserById,
 );
 
+/**
+ * DELETE /v1/users/:userId
+ * Deletes a user by ID.
+ * Requires admin role.
+ */
 router.delete(
   '/:userId',
   authenticate,
@@ -42,8 +58,19 @@ router.delete(
   deleteUserById,
 );
 
+/**
+ * GET /v1/users/current
+ * Returns the currently authenticated user's profile.
+ * Requires role: admin or user.
+ */
 router.get('/current', authenticate, authorize(['admin', 'user']), getCurrentUser);
 
+/**
+ * PUT /v1/users/current
+ * Updates the currently authenticated user's profile.
+ * Body: optional username, email, password, first_name, last_name, links
+ * Requires role: admin or user.
+ */
 router.put(
   '/current',
   authenticate,
@@ -95,6 +122,11 @@ router.put(
   updateCurrentUser,
 );
 
+/**
+ * DELETE /v1/users/current
+ * Deletes the currently authenticated user's account.
+ * Requires role: admin or user.
+ */
 router.delete('/current', authenticate, authorize(['admin', 'user']), deleteCurrentUser);
 
 export default router;

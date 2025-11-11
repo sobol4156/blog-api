@@ -12,6 +12,11 @@ import User from '@/models/user';
 
 const router = Router();
 
+/**
+ * POST /v1/auth/register
+ * Registers a new user.
+ * Body: { email: string, password: string, role?: 'admin' | 'user' }
+ */
 router.post(
   `/register`,
   body('email')
@@ -44,6 +49,11 @@ router.post(
   register,
 );
 
+/**
+ * POST /v1/auth/login
+ * Authenticates user and issues tokens.
+ * Body: { email: string, password: string }
+ */
 router.post(
   '/login',
   body('email')
@@ -85,6 +95,11 @@ router.post(
   login,
 );
 
+/**
+ * POST /v1/auth/refresh-token
+ * Issues a new access token using a valid refresh token cookie.
+ * Cookie: refreshToken (JWT)
+ */
 router.post(
   '/refresh-token',
   cookie('refreshToken')
@@ -96,6 +111,11 @@ router.post(
   refreshToken,
 );
 
+/**
+ * POST /v1/auth/logout
+ * Revokes refresh token and logs the user out.
+ * Requires authentication.
+ */
 router.post('/logout', authenticate, logout);
 
 export default router;

@@ -17,6 +17,12 @@ const upload = multer();
 
 const router = Router();
 
+/**
+ * POST /v1/blogs
+ * Creates a new blog post.
+ * Form-Data: title (string), content (string), status ('draft' | 'published'), banner_image (file)
+ * Requires authentication and role: admin or user.
+ */
 router.post(
   '/',
   authenticate,
@@ -38,6 +44,12 @@ router.post(
   createBlog,
 );
 
+/**
+ * GET /v1/blogs
+ * Returns a paginated list of blogs.
+ * Query: limit (1..50), offset (>=0)
+ * Requires authentication and role: admin or user.
+ */
 router.get(
   '',
   authenticate,
@@ -48,6 +60,12 @@ router.get(
   getAllBlogs,
 );
 
+/**
+ * GET /v1/blogs/user/:userId
+ * Returns a paginated list of blogs authored by a specific user.
+ * Query: limit (1..50), offset (>=0)
+ * Requires authentication and role: admin or user.
+ */
 router.get(
   '/user/:userId',
   authenticate,
@@ -59,8 +77,19 @@ router.get(
   getBlogsByUser,
 );
 
+/**
+ * GET /v1/blogs/:slug
+ * Returns a single blog by its slug.
+ * Requires authentication and role: admin or user.
+ */
 router.get('/:slug', authenticate, authorize(['admin', 'user']), validationError, getBlogBySlug);
 
+/**
+ * PUT /v1/blogs/:blogId
+ * Updates a blog post by ID.
+ * Form-Data: optional title, content, status, banner_image (file)
+ * Requires authentication and role: admin or user.
+ */
 router.put(
   '/:blogId',
   authenticate,
@@ -84,6 +113,11 @@ router.put(
   updateBlog,
 );
 
+/**
+ * DELETE /v1/blogs/:blogId
+ * Deletes a blog post by ID.
+ * Requires authentication and role: admin or user.
+ */
 router.delete(
   '/:blogId',
   authenticate,

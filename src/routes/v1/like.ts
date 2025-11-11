@@ -9,6 +9,11 @@ import validationError from '@/middlewares/validationError';
 
 const router = Router();
 
+/**
+ * POST /v1/likes/blog/:blogId
+ * Adds a like to a blog post.
+ * Requires authentication and role: admin or user.
+ */
 router.post(
   '/blog/:blogId',
   authenticate,
@@ -18,6 +23,11 @@ router.post(
   likeBlog,
 );
 
+/**
+ * DELETE /v1/likes/blog/:blogId
+ * Removes a like from a blog post.
+ * Requires authentication and role: admin or user.
+ */
 router.delete(
   '/blog/:blogId',
   authenticate,
