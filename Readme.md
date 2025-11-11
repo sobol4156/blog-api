@@ -197,6 +197,6 @@ curl -X POST http://localhost:4000/v1/blogs \
 If desired, we can expose interactive API docs using `swagger-ui-express` and an OpenAPI spec. Feel free to request this and it will be added.
 
 ## License
-Unlicensed for now. Add your preferred license before production.
+MIT License. See the `LICENSE` file for details.
 
 
