@@ -193,9 +193,6 @@ curl -X POST http://localhost:4000/v1/blogs \
 - Add new endpoints under `src/routes/v1` and corresponding controllers under `src/controllers/v1`.
 - Keep validation close to route definitions; keep controllers focused on business logic.
 
-## OpenAPI/Swagger (optional)
-If desired, we can expose interactive API docs using `swagger-ui-express` and an OpenAPI spec. Feel free to request this and it will be added.
-
 ## License
 MIT License. See the `LICENSE` file for details.
 
